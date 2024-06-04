@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+    <div th:insert="header"></div>
+
+    <style>
+
+
+        .card {
+            width: 400px;
+            height:300px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #ff5555; /* Red */
+        }
+
+        p {
+            color: #fff; /* White */
+        }
+        .error{
+            color:red;
+        }
+    </style>
+
+
+    <script>
+        var gymemail;
+        function choosepackage(id) {
+            window.location.href = "/UserChoosePackage?id=" + id;
+        }
+        function showpackages() {
+            var gymid = document.getElementById("gym").innerText;
+            var url = "/ShowPackages?gymid=" + gymid;
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml2(ans));
+
+        }
+
+        function renderAsHtml2(ans) {
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            var s = ``;
+            for (var i = 0; i < arr.length; i++) {
+                s += `<div class="col-lg-4">
+                    <div class="single-price-plan">
+                        <h4>` + arr[i].name + `</h4>
+                        <div class="price-plan">
+                            <h2>` + arr[i].price + `<span>&#8377</span></h2>
+                            <p>` + arr[i].duration + ` days</p>
+                        </div>
+                        <p style="text-align:left; color:gray; padding:20px;">` + arr[i].description + ` 
+                      
+                        </p>
+                        <a type="button" class="btn primary-btn price-btn"  onclick="choosepackage(` + arr[i].id + `)">Choose Package</a>
+                    </div>
+                </div>`;
+            }
+
+            document.getElementById("d2").innerHTML = s;
+        }
+
+
+        function getgymdata() {
+            var gymid = document.getElementById("gym").innerText;
+            var url = "/UserGetGymData?gymid=" + gymid;
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+
+        }
+
+        function renderAsHtml(ans) {
+
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            var address = arr[0].address;
+            var city = arr[0].city;
+            var photo = arr[0].photo;
+            var name = arr[0].name;
+            var mobile = arr[0].mobile;
+
+            if (arr[0].AC === 'true')
+                document.getElementById("ac").style.display = "block";
+            if (arr[0].Pool === 'true')
+                document.getElementById("pool").style.display = "block";
+            if (arr[0].ChangingRoom === 'true')
+                document.getElementById("cr").style.display = "block";
+            if (arr[0].Shower === 'true')
+                document.getElementById("sh").style.display = "block";
+            if (arr[0].WaterFacility === 'true')
+                document.getElementById("wf").style.display = "block";
+            if (arr[0].ParkingFacility === 'true')
+                document.getElementById("pf").style.display = "block";
+
+            var ph = ``;
+            for (var i = 0; i < arr.length; i++) {
+                ph += `<div class="col-lg-4 col-sm-6 mix crossfit workout">
+                        <div class="gallery-item">
+                            <img src="` + arr[i].path + `" alt="">
+                            <div class="gi-hover-warp">
+                                <div class="gi-hover">
+                                    <a href="` + arr[i].path + `" class="image-popup"><i class="fa fa-search-plus"></i></a>
+                               
+                                    <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+
+            document.getElementById("photos").innerHTML = ph;
+            document.getElementById("gymphoto").innerHTML = `<img src="` + arr[0].photo + `" style="width:100vw;height:400px;">`;
+
+            document.getElementById("gymName").innerHTML = arr[0].name;
+            document.getElementById("gymAddress").innerHTML = arr[0].address;
+            document.getElementById("mobile").innerHTML = mobile;
+            document.getElementById("email").innerHTML = arr[0].email;
+            gymemail = arr[0].email;
+            
+            var latitude = arr[0].latitude;
+            var longitute = arr[0].longitude;
+
+            document.getElementById("gmap_canvas").src = "https://maps.google.com/maps?q=" + latitude + "," + longitute + "&ie=UTF8&iwloc=&output=embed";
+
+            userShowRatings();
+
+        }
+
+
+    </script>
+
+
+
+</head>
+
+<body onload="getgymdata();showpackages()" style="background-color:black">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <div th:insert="navbar::usernavbar"></div>
+    <div id="gym" th:text="${gymid}" style="display:none"></div>
+
+    <section class="" style="height:700px;margin-top:100px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-7 m-auto text-center">
+                    <div class="bs-hero-text">
+                        <h2>Discover our fitness world</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8" id="gymphoto">
+
+                </div>
+                <div class="col-lg-4 m-auto" id="gyminfo">
+                    <div class="card">
+                        <h2 id="gymName"></h2>
+                        <p style="margin-top:20px;" id="gymAddress"></p>
+                        <p id="mobile"></p>
+                        <p id="email"></p>
+                        <p id="averagerating"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<!--<section class="gallery-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="gallery-controls">
+                        <ul>
+                            <li class="active" data-filter="*">All GALLERY</li>
+                            <li data-filter=".crossfit">Crossfit</li>
+                            <li data-filter=".workout">Workout</li>
+                            <li data-filter=".gym">GYM</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row gallery-filter" id="photos">
+
+        </div>
+    </section>-->
+<section class="blog-single-section spad" style="padding-top:10px">
+    <div class="container">
+
+
+        <h2 style="color:white;text-align:center" class="m-3">Amenities</h2>
+        <div class="row">
+
+
+            <div class="col-lg-3 mb-3" id="pool" style="display:none">
+                <div class="recent-item set-bg" style="width:200px;height:200px"  data-setbg="myuploads/Pool.avif">
+
+                </div>
+                <a href="#" class="recent-text">
+                    <div class="categories" style="color:white">Pool</div>
+                    <h5 style="color:white">Dive into relaxation with our pristine pool facility.</h5>
+                </a>
+            </div>
+            <div class="col-lg-3 mb-3" id="ac" style="display:none">
+                <div class="recent-item set-bg" style="width:200px;height:200px" data-setbg="myuploads/AC.jpeg">
+                </div>
+                <a href="#" class="recent-text">
+                    <div class="categories" style="color:white">AC</div>
+                    <h5 style="color:white">Stay cool and comfortable with our state-of-the-art AC system.</h5>
+                </a>
+            </div>
+            <div class="col-lg-3 mb-3" id="cr" style="display:none;">
+                <div class="recent-item set-bg" style="width:200px;height:200px" data-setbg="myuploads/ChangingRoom.avif">
+                </div>
+                <a href="#" class="recent-text">
+                    <div class="categories" style="color:white">Changing Room</div>
+                    <h5 style="color:white">Refresh and renew in our spacious and well-equipped changing rooms.</h5>
+                </a>
+            </div>
+            <div class="col-lg-3 mb-3" id="sh" style="display:none">
+                <div class="recent-item set-bg" style="width:200px;height:200px" data-setbg="myuploads/Shower.jpg">
+                </div>
+                <a href="#" class="recent-text">
+                    <div class="categories" style="color:white">Shower</div>
+                    <h5 style="color:white">Unwind post-workout with our invigorating shower facilities.</h5>
+                </a>
+            </div>
+            <div class="col-lg-3 mb-3" id="wf" style="display:none">
+                <div class="recent-item set-bg" style="width:200px;height:200px" data-setbg="myuploads/WaterFacility.jpg">
+
+                </div>
+                <a href="#" class="recent-text">
+                    <div class="categories" style="color:white">Water Facility</div>
+                    <h5 style="color:white">Hydrate and stay refreshed with convenient water stations.</h5>
+                </a>
+            </div>
+            <div class="col-lg-3 mb-3" id="pf" style="display:none">
+                <div class="recent-item set-bg" style="width:200px;height:200px" data-setbg="myuploads/ParkingFacility.jpeg">
+                </div>
+                <a href="#" class="recent-text">
+                    <div class="categories" style="color:white">Parking Facility</div>
+                    <h5 style="color:white">Park hassle-free with ample parking facilities available.</h5>
+                </a>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</section>
+
+<section class="price-section spad set-bg" data-setbg="img/price-bg.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>CHOOSE Package</h2>
+                    <p>Select the perfect package to match your fitness goals and embark on a journey to a healthier, stronger you.</p>
+                </div>
+
+            </div>
+        </div>
+        <div id="d2" class="row">
+
+
+
+        </div>
+    </div>
+</section>
+<section class="gallery-section spad">
+    <div class="container">
+      <div class="row">
+            <div class="col-lg-12">
+                <div class="gallery-controls">
+                    <ul>
+                        <li class="active" data-filter="*"><h4 style="color:red">All GALLERY</h4></li>
+<!--                        <li data-filter=".crossfit">Crossfit</li>
+                        <li data-filter=".workout">Workout</li>
+                        <li data-filter=".gym">GYM</li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row gallery-filter" id="photos">
+
+        </div>
+    </div>
+</section>
+<div class="container">
+    <h3 style="text-align:center;color:white;margin:25px;">Add a review</h3>
+    <div class="col-lg-12 offset-lg-1">
+        <div class="contact-form">
+            
+            <form action="#" id="addreview">
+                <div class="row">
+                    
+                    <div class="col-lg-3"></div>
+                    <table>
+                        <tr> <td><label class="form-group" style="color:white;margin:15px;margin-top:0px;"> Give Ratings..</label></td>
+                            <td>
+                                <img id="rating_1" src="rating/empty_star.png" onmouseover="fill(this);" onmouseout="unfill(this);" onclick="selected(this);" width="50px;" height="50px;">
+                            </td>
+                            <td>
+                                <img id="rating_2" src="rating/empty_star.png" onmouseover="fill(this)" onmouseout="unfill(this)" onclick="selected(this)" width="50px;" height="50px;">
+                            </td>
+                            <td>
+                                <img id="rating_3" src="rating/empty_star.png" onmouseover="fill(this)" onmouseout="unfill(this)" onclick="selected(this)" width="50px;" height="50px;">
+                            </td>
+                            <td>
+                                <img id="rating_4" src="rating/empty_star.png" onmouseover="fill(this)" onmouseout="unfill(this)" onclick="selected(this)" width="50px;" height="50px;">
+                            </td>
+                            <td>
+                                <img  id="rating_5" src="rating/empty_star.png" onmouseover="fill(this)" onmouseout="unfill(this)" onclick="selected(this)" width="50px;" height="50px;">
+                            </td>
+                        </tr>
+                    </table>
+                   <div class="col-lg-3"></div>
+                   
+                   <div class="col-lg-1"></div>
+                    <div class="col-lg-10 mt-2">
+                        <textarea placeholder="Comment" id="comment" required></textarea>
+                        <input type="button" class="c-btn" value="Submit" onclick="addreview()">
+                    </div>
+                   <div class="col-lg-1"></div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <h3 style="text-align: center;margin:25px;color:white">Our Customers' Reviews</h3>
+    <div  id="showratings" style="background-color:#e0dfdf;border:2px solid black;border-radius:20px;padding:10px;margin-top:10px;">
+
+    </div>
+<!--    <div id="averagerating"></div>-->
+</div>
+<div class="container">
+    <h2 class="h2-title" id="gymname2" style="text-align:center;margin-top:12px;color:white">Find Us on Google Maps :</h2>
+
+    <div class="main-contact-map-in" style="height:500px;margin:35px;">
+        <div class="mapouter"><div class="gmap_canvas">
+                <iframe width="100%" height="100%" id="gmap_canvas" src="https://maps.google.com/maps?q=31.636694035778973,74.87413616805217&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://2yu.co">2yu</a><br><style>.mapouter{
+                        position:relative;
+                        text-align:right;
+                        height:100%;
+                        width:100%;
+                        }</style><a href="https://embedgooglemap.2yu.co/">html embed google map</a><style>.gmap_canvas {
+                        overflow:hidden;
+                        background:none!important;
+                        height:100%;
+                        width:100%;
+                        }</style></div></div>
+    </div>
+</div>
+<!-- Header Section Begin -->
+<div  th:replace="HtmlFooter"></div>
+
+<div th:insert="footer"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+                            
+                            function userShowRatings() {
+
+
+                                // gymemail=document.getElementById("email").innerHTML;
+
+
+
+                                var url = "/UserShowRatings?gymemail=" + gymemail;
+                                fetch(url)
+                                        .then(response => response.text())
+                                        .then(ans => renderAsHtml4(ans));
+
+
+
+
+
+                            }
+                            function renderAsHtml4(ans) {
+
+
+                                var mainobj = JSON.parse(ans);
+                                var arr = mainobj.ans;
+                                   var avgrating=0;
+                                   
+
+
+
+                                //averageRating();
+                                var ren = "";
+
+                                for (var i = 0; i < arr.length; i++)
+                                {
+                                    avgrating=avgrating+Number(arr[i].rating);
+                                    var st = arr[i];
+                                    ren += "<div class=\"row\" >";
+
+                                    ren += "<div class= \"col-sm-4\" style=\"text-align: center\" >";
+                                    ren += "<div class=\"card-body\">";
+                                    for (var j = 0; j < st.rating; j++) {
+                                        ren += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/filled_star.png\" >";
+                                    }
+                                    for (var j = st.rating; j < 5; j++) {
+                                        ren += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/empty_star.png\" >";
+                                    }
+                                    ren += "</div>";
+                                    ren += "</div>";
+
+                                    ren += "<div class= \"col-sm-4\" style=\"text-align: center\" >";
+                                    ren += "<div class=\"card-body\">";
+                                    ren += "<label class=\"card-text text-alli\" style=\"font-size: 16px;text-align: center;color: black\" ><b>Comment : </b><br>" + st.comment + "</label><br><br>";
+                                    ren += "</div>";
+                                    ren += "</div>";
+
+                                    ren += "<div class= \"col-sm-4\" style=\"text-align: center\" >";
+                                    ren += "<div class=\"card-body\">";
+                                    ren += "<label class=\"card-text text-alli\" style=\"font-size: 16px;text-align: center;color: black\" ><b>User Email : </b><br>" + st.useremail + "</label><br><br>";
+                                    ren += "</div>";
+                                    ren += "</div>";
+                                    ren += "</div>";
+
+                                }
+                                
+                                avgrating=avgrating/arr.length;
+                               
+                                document.getElementById("showratings").innerHTML = ren;
+                               
+                                
+                                var avg="";
+                                var parts = avgrating.toString().split(".");
+                                if(parts.length<2){
+                                    avg += "<div class= \"col-sm-12\" style=\"text-align: center\" >";
+                                    avg += "<div class=\"card-body\">";
+                                    for (var j = 0; j <=  avgrating-1; j++) {
+                                        avg += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/filled_star.png\" >";
+                                    }
+                                    //avg += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/download.jpg\" >";
+                                    for (var j = avgrating; j < 5; j++) {
+                                        avg += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/empty_star.png\" >";
+                                    }
+                                    avg += "</div>";
+                                    avg += "</div>";
+                                }
+                               else{
+                                  
+                                    avg += "<div class= \"col-sm-12\" style=\"text-align: center\" >";
+                                    avg += "<div class=\"card-body\">";
+                                    for (var j = 0; j < avgrating-1; j++) {
+                                        avg += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/filled_star.png\" >";
+                                    }
+                                    avg += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/download.jpg\" >";
+                                    for (var j =avgrating; j < 4; j++) {
+                                        avg += "<img class=\"img-thumbnail\" style=\"border: 2px solid black; border-radius: 20px;width: 40px; height: 40px\" src=\"rating/empty_star.png\" >";
+                                    }
+                                    avg += "</div>";
+                                    avg += "</div>";
+                               } 
+                               
+                                
+                                if(avgrating>0)document.getElementById("averagerating").innerHTML = avg;
+
+                            }
+
+
+
+
+                            var n = 0;
+                            function fill(obj)
+                            {
+                                var img = obj.src;
+                                var id = obj.id;
+                                var val = parseInt(id.substring(id.indexOf("_") + 1));
+                                var i;
+                                if (n === 0)
+                                {
+                                    i = 1;
+                                } else
+                                {
+                                    i = n + 1;
+                                }
+                                for (; i <= 5; i++)
+                                {
+                                    if (i <= val)
+                                    {
+                                        document.getElementById("rating_" + i).src = "rating/filled_star.png";
+
+                                    } else
+                                    {
+                                        document.getElementById("rating_" + i).src = "rating/empty_star.png";
+                                    }
+                                }
+
+                            }
+                            function selected(obj)
+                            {
+                                var id = obj.id;
+                                var val = parseInt(id.substring(id.indexOf("_") + 1));
+                                n = val;
+                            }
+                            function unfill(obj)
+                            {
+                                var i;
+                                if (n === 0)
+                                {
+                                    i = 1;
+                                } else
+                                {
+                                    i = n + 1;
+                                }
+                                for (; i <= 5; i++)
+                                {
+                                    document.getElementById("rating_" + i).src = "rating/empty_star.png";
+                                }
+                            }
+
+                            function addreview() {
+                                
+                            if($("#addreview").valid()){
+                                var comment = document.getElementById("comment").value;
+
+
+                               
+                                var gymemail = document.getElementById("email").innerText;
+
+                                var url = "/UserAddReview?comment=" + comment + "&stars=" + n + "&gymemail=" + gymemail;
+                                fetch(url)
+                                        .then(response => response.text())
+                                        .then(ans => renderAsHtml3(ans));
+                            }
+                        }
+                            function renderAsHtml3(ans) {
+                                if (ans === "success") {
+                                    Swal.fire({
+                                        title: "Success!",
+                                        text: "Review added successfully!",
+                                        icon: "success"
+                                    });
+                                    userShowRatings();
+
+                                } else if (ans === "fail") {
+                                    Swal.fire({
+                                        title: "Fail!",
+                                        text: "You have already added a review!",
+                                        icon: "warning"
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Some server error!",
+                                        text: ans,
+                                        icon: "error"
+                                    });
+                                }
+                            }
+
+</script>
+</body>
+
+</html>

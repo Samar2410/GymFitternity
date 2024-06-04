@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+
+    <div th:insert="header"></div>
+    <style>
+        #check{
+
+            color:white;
+
+        }
+
+        .checkbox{
+            width:10%;
+        }
+         body{
+            background: #151515;
+        }
+        .error{
+            color:red;
+        }
+    </style>
+   
+</head>
+
+<body onload="getcities();fillform()" >
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::ownernavbar"></div>
+
+    <!-- Header End -->
+
+    <h1 th:text="${gymid}" id="gymid" style="display: none"  ></h1>
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i>3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Edit Gym</h4>
+                        <form action="" id="editform">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Gym name" required name="gn" id="gn">
+                                </div>
+                                <div class="col-lg-12 mb-4">
+                                    <label style="color:white" for="city-names">Choose a city:</label> 
+                                    <select  class="form-control" disabled  name="city-names" id="city-names"> 
+
+                                    </select>
+
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="number" placeholder="Phone number" name="pn" required id="pn">
+                                </div>
+                                
+                                <div class="col-lg-12">
+                                    <input  disabled type="text" placeholder="Latitude"  id="la">
+                                </div>
+                                <div class="col-lg-12">
+                                    <input disabled type="text" placeholder="Longitude"  id="lo">
+                                </div>
+                                <div class="col-lg-12">
+                                    <label style="color:white" for="f1">Add photo</label>
+                                    <input type="file"  id="f1" name="f1" required class="form-control" >
+                                </div>
+<!--                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Owner email"  id="em">
+                                </div>-->
+
+
+                                <div class="col-lg-12">
+                                    <textarea placeholder="Address" id="ad" name="id" required></textarea>
+                                </div>
+                                <div class="col-lg-12 row" id="check">
+                                    <div class="col-sm-4"></div>
+                                    <div  class="col-sm-4 mb-4"><h2 style="color:white;">Amenities</h2></div>
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox1">Pool</label>
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox1" name="Pool" value="Pool"> 
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label for="checkbox2">AC</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox"  id="checkbox2" name="AC" value="AC">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox3">Changing Room</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox3" name="Changing Room" value="Changing Room">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox4">Shower</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox4" name="Shower" value="Shower">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox5">Parking Facility</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox5" name="Parking Facility" value="Parking Facility">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="checkbox6">Water Facility</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox6" name="Water Facility" value="Water Facility">
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Submit" onclick="editgym()">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+    <div id="d1"></div>
+    <!-- Cta Section Begin -->
+    
+    <!-- Cta Section End -->
+
+    <!-- Footer Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <!--    <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/masonry.pkgd.min.js"></script>
+        <script src="js/main.js"></script>-->
+    <div th:insert="footer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script>
+
+    var id=0;
+        function fillform(){
+            id = document.getElementById("gymid").innerText;
+            var url="/GetGymData?id="+id;
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml3(ans));
+        }
+        function renderAsHtml3(ans){
+           
+            var obj=JSON.parse(ans);
+            var arr=obj.ans;
+            var gym=arr[0];
+            document.getElementById("gn").value=gym.name;
+             
+        
+            document.getElementById("city-names").value=gym.city;
+            
+            document.getElementById("pn").value=gym.mobile;
+            document.getElementById("lo").value=gym.longitude;
+            document.getElementById("la").value=gym.latitude;
+            document.getElementById("ad").value=gym.address;
+            
+            
+            //var photo = document.getElementById("f1").files[0];
+          
+            
+            if(gym.Pool==='true'){
+               document.getElementById("checkbox1").click();
+            }
+           
+            if(gym.AC==='true'){
+               document.getElementById("checkbox2").click();
+            }
+            
+            if(gym.ChangingRoom==='true'){
+               document.getElementById("checkbox3").click();
+            }
+           
+            if(gym.Shower==='true'){
+               document.getElementById("checkbox4").click();
+            }
+           
+            if(gym.ParkingFacility==='true'){
+               document.getElementById("checkbox5").click();
+            }
+           
+            if(gym.WaterFacility==='true'){
+               document.getElementById("checkbox6").click();
+            }
+           
+            
+        }
+        
+        
+        
+        
+        
+        
+
+
+    
+        function editgym(){
+            if(($("#editform").valid())){
+            var url = "/OwnerApplyChangesToGym";
+            var formdata = new FormData();
+            
+
+             var gym=document.getElementById("gn").value;
+             
+        
+            var city = document.getElementById("city-names").value;
+            
+            var mobile=document.getElementById("pn").value;
+            var longitude=document.getElementById("lo").value;
+            var latitude=document.getElementById("la").value;
+            var address=document.getElementById("ad").value;
+            
+            
+            var photo = document.getElementById("f1").files[0];
+          formdata.append("id",id);
+            formdata.append("gym",gym);
+            formdata.append("city",city);
+            formdata.append("mobile",mobile);
+            formdata.append("longitude", longitude);
+            formdata.append("latitude", latitude);
+            formdata.append("address",address);
+            formdata.append("photo", photo);
+            if(document.getElementById("checkbox1").checked){
+               formdata.append("pool","true");
+            }
+            else formdata.append("pool","false");
+            if(document.getElementById("checkbox2").checked){
+               formdata.append("AC","true");
+            }
+            else formdata.append("AC","false");
+            if(document.getElementById("checkbox3").checked){
+               formdata.append("change","true");
+            }
+            else formdata.append("change","false");
+            if(document.getElementById("checkbox4").checked){
+               formdata.append("shower","true");
+            }
+            else formdata.append("shower","false");
+            if(document.getElementById("checkbox5").checked){
+               formdata.append("park","true");
+            }
+            else formdata.append("park","false");
+            if(document.getElementById("checkbox6").checked){
+               formdata.append("water","true");
+            }
+            else formdata.append("water","false");
+            
+
+            
+            fetch(url, {method: "POST", body: formdata})
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml2(ans));
+        }
+    }
+        function renderAsHtml2(ans){
+            if(ans==="success"){
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Gym edited successfully!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      window.location.href="/OwnerHome";
+                  },2000);
+                    
+                
+            }
+            
+            else {
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            }
+        }
+        
+        function getcities() {
+
+            var url = "/GetCities";
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+           
+
+        }
+
+        function renderAsHtml(ans) {
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            var s = "";
+            for (var i = 0; i < arr.length; i++) {
+                s += "<option  value=\"" + arr[i].cityname + "\">" + arr[i].cityname + "</option>";
+            }
+
+            document.getElementById("city-names").innerHTML = s;
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>

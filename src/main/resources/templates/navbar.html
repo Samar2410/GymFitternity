@@ -1,0 +1,189 @@
+<div  th:fragment="adminnavbar">
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="logo">
+                <a href="#" >
+                    <img src="img/logo3.png" style="margin-bottom:10px;" alt="">
+                </a>
+                <h3 style="display:inline;color:white;">Gym Fitternity</h3>
+            </div>
+            
+            <div class="container">
+                <div class="nav-menu">
+                    <nav class="mainmenu mobile-menu">
+                        <div th:if="${session.adminemail}">
+                            <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                             <li><a href="#">Manage</a>
+                                <ul class="dropdown">
+                                   <li><a href="/AdminManageFranchises">Manage Franchises</a></li>
+                            <li><a href="/AdminManageGyms">Manage Gyms</a></li>
+                            <li><a href="/AdminManageCities">Manage Cities</a></li>
+                             <li><a href="/AdminManageCommission">Manage Commission</a></li>
+                                </ul>
+                            </li>
+                             <li><a href="/CheckEarnings">Check Earnings</a></li>
+                            
+                            <li><a href="/AdminChangePassword">Change Password</a></li>
+                           <li><a href="/AdminLogOut">Log Out</a></li>
+
+                        </ul>
+                        </div>
+                        <div th:unless="${session.adminemail}">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            
+                           
+                            
+                             <li><a href="#">User</a>
+                                <ul class="dropdown">
+                                    <li><a href="/UserLogin">Login</a></li>
+                                    <li><a href="/UserSignup">Sign up</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Owner</a>
+                                <ul class="dropdown">
+                                    <li><a href="/OwnerSignup">Sign up</a></li>
+                                    <li><a href="/OwnerLogin">Login</a></li>
+                                     
+                                </ul>
+                            </li>
+                            
+ <li><a href="/AdminLogin">Admin Login</a></li>
+                        </ul>
+                            </div>
+                    </nav>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+</div>
+
+<div th:fragment="usernavbar">
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="logo">
+                <a href="#" >
+                    <img src="img/logo3.png" style="margin-bottom:10px;" alt="">
+                </a>
+                <h3 style="display:inline;color:white;">Gym Fitternity</h3>
+            </div>
+<!--            <div class="top-social">
+                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+            </div>-->
+            <div class="container">
+                <div class="nav-menu ">
+                    <nav class="mainmenu mobile-menu mb-3">
+                        <div th:if="${session.useremail}">
+                            <ul>
+                                 <li class="active"><a href="/">Home</a></li>
+                                 <li><a href="/UserBookings">View Bookings</a></li>
+                                 <li><a href="/UserChangePassword">Change password</a></li>
+                                 
+                                 <li><a href="/UserLogOut">Log Out</a></li>
+                            </ul>
+                        </div>
+                         <div th:unless="${session.useremail}">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            
+                            <li><a href="#">User</a>
+                                <ul class="dropdown">
+                                    <li><a href="/UserLogin">Login</a></li>
+                                    <li><a href="/UserSignup">Sign up</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Owner</a>
+                                <ul class="dropdown">
+                                    <li><a href="/OwnerLogin">Login</a></li>
+                                    <li><a href="/OwnerSignup">Sign up</a></li>
+                                    
+                                </ul>
+                            </li>
+                            <li><a href="/AdminLogin">Admin Login</a></li>
+                            
+                        </ul>
+                         </div>
+                    </nav>
+<!--                    <div class="row" th:if="${session.useremail}">
+                    <div class="col-lg-3"></div>
+                    <h3 class="col-lg-6" style="color:white;" th:text="'Welcome  '+${session.useremail}"></h3>
+                     <div class="col-lg-3"></div>-->
+                </div>
+                </div>
+<!--                <div class="row" th:if="${session.useremail}">
+                    <div class="col-lg-3"></div>
+                    <h3 class="col-lg-6" style="color:white;text-align:center;" th:text="'Welcome  '+${session.useremail}"></h3>
+                     <div class="col-lg-3"></div>
+                </div>-->
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+</div>
+
+<div th:fragment="ownernavbar">
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="logo">
+                <a href="#" >
+                    <img src="img/logo3.png" style="margin-bottom:10px;" alt="">
+                </a>
+                <h3 style="display:inline;color:white;">Gym Fitternity</h3>
+            </div>
+<!--            <div class="top-social">
+                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+            </div>-->
+            <div class="container">
+                <div class="nav-menu">
+                    <nav class="mainmenu mobile-menu">
+                        <div th:if="${session.owneremail}">
+                            <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            
+                            <li><a href="/OwnerManageGyms">Manage Gyms</a></li>
+                            <li><a href="/AllGyms">Edit Gyms</a></li>
+                            <li><a href="/OwnerViewBookings">View Bookings</a></li>
+                            <li><a href="/OwnerChangePassword">Change password</a></li>
+                           <li><a href="/OwnerLogOut">Log Out</a></li>
+
+                        </ul>
+                        </div>
+                        <div th:unless="${session.owneremail}">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            
+                          
+                             <li><a href="#">User</a>
+                                <ul class="dropdown">
+                                    <li><a href="/UserLogin">Login</a></li>
+                                    <li><a href="/UserSignup">Sign up</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Owner</a>
+                                <ul class="dropdown">
+                                    <li><a href="/OwnerSignup">Owner Sign up</a></li>
+                                    <li><a href="/OwnerLogin">Owner Login</a></li>
+                                </ul>
+                            </li>
+                              <li><a href="/AdminLogin">Admin Login</a></li>
+                            
+
+                        </ul>
+                            </div>
+                    </nav>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+</div>

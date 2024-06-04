@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+<div th:insert="header"></div>
+<script>
+    
+    function getcities(){
+        var url="/UserGetCities";
+         fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml(ans) );
+    }
+    
+    function renderAsHtml(ans){
+        var obj=JSON.parse(ans);
+        var arr=obj.ans;
+        var s=``;
+        for(var i=0;i<arr.length;i++){
+            s+=`<div class="col-md-4" style="color:black;">
+                    <div  class="feature-item set-bg" style="padding:10px;margin:20px;height:400px;background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url(`+arr[i].photo+`); background-repeat: no-repeat;
+">
+                        <h3>`+arr[i].cityname+`</h3>
+                        <p>`+arr[i].desc+`</p>
+                        <a href="/UserShowGyms?cityname=`+arr[i].cityname+`" class="primary-btn f-btn">Select</a>
+                    </div>
+                </div>`;
+        }
+        document.getElementById("cities").innerHTML=s;
+    }
+</script>
+</head>
+
+<body onload="getcities()" style="background-color:black;">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::usernavbar"></div>
+ <!-- Header End -->
+
+    <!-- Hero Section Begin -->
+    <section class="hero-section">
+        
+        <div class="hero-items owl-carousel">
+           
+            <div class="single-hero-item set-bg" data-setbg="img/hero-slider/hero-1.jpg">
+                
+                <div class="container">
+                     
+                    <div class="row">
+                        
+                        <div class="col-lg-12">
+                            <div class="hero-text">
+                                <h2>Join Us Now</h2>
+                                <h1>FITNESS & SPORT</h1>
+                                <a href="#" class="primary-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-hero-item set-bg" data-setbg="img/hero-slider/hero-2.jpg">
+                <div class="container">
+                    <div class="row">
+                          
+                        <div class="col-lg-12">
+                            <div class="hero-text">
+                                <h2>Join Us Now</h2>
+                                <h1>FITNESS & SPORT</h1>
+                                <a href="#" class="primary-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-hero-item set-bg" data-setbg="img/hero-slider/hero-3.jpg">
+                <div class="container">
+                    <div class="row">
+                          
+                        <div class="col-lg-12">
+                            <div class="hero-text">
+                                <h2>Join Us Now</h2>
+                                <h1>FITNESS & SPORT</h1>
+                                <a href="#" class="primary-btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero End -->
+
+    <!-- Feature Section Begin -->
+    <section class="feature-section">
+        <div class="container-fluid" style="color:black;">
+            <div class="row" id="cities" style="color:black;">
+<!--                <div class="col-md-4">
+                    <div class="feature-item set-bg" data-setbg="img/feature/feature-1.jpg">
+                        <h3>GROUP CLASSES</h3>
+                        <p>The Sopranos manages to address the biases<br /> and benefits of therapy</p>
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item set-bg" data-setbg="img/feature/feature-2.jpg">
+                        <h3>PERSONAL TRAINING</h3>
+                        <p>Strep throat is very common during the flu<br /> seasons and it can be preceded</p>
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-item set-bg" data-setbg="img/feature/feature-3.jpg">
+                        <h3>Sports Nutrition</h3>
+                        <p>A Human Being’s right to life implies his right to<br /> have the free and unrestricted</p>
+                        <a href="#" class="primary-btn f-btn">Read More</a>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </section>
+    <!-- Feature Section End -->
+
+    <!-- About Section Begin -->
+    <section class="home-about spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="about-text">
+                        <h2>WELCOME TO GYM FITTERNITY</h2>
+                        <p class="short-details">Gym Fitternity is a fitness platform that can help
+                            everyday person.</p>
+                        <p class="long-details">Your success story begins with a single step—take that step today and embark on a journey to a stronger, healthier you.</p>
+                       
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-img">
+                        <img src="img/home-about.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section End -->
+
+    <!-- Classes Section Begin -->
+   
+    <!-- Classes Section End -->
+
+    <!-- Class Time Section Begin -->
+    
+           
+
+
+    <!-- Choseus Section Begin -->
+    <section class="chooseus-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Why People Choose Us</h2>
+                        <p>Our sport experts and latest sports equipment are the winning combination.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="choose-item">
+                        <img src="img/icons/chose-icon-1.png" alt="">
+                        <h5>Support 24/7</h5>
+                        <p>Our team is available around the clock to provide you with support and guidance whenever you need it. </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="choose-item">
+                        <img src="img/icons/chose-icon-2.png" alt="">
+                        <h5>Our trainer</h5>
+                        <p>Work with our experienced and certified trainers who are passionate about helping you reach your fitness goals.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="choose-item">
+                        <img src="img/icons/chose-icon-3.png" alt="">
+                        <h5>Personalized sessions</h5>
+                        <p>Enjoy custom-tailored workout sessions designed to meet your unique fitness needs and preferences.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="choose-item">
+                        <img src="img/icons/chose-icon-4.png" alt="">
+                        <h5>Our equipment</h5>
+                        <p>Train with top-of-the-line equipment, ensuring you have the best tools to achieve your fitness objectives.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="choose-item">
+                        <img src="img/icons/chose-icon-5.png" alt="">
+                        <h5>Classes daily</h5>
+                        <p>Participate in a variety of daily classes that keep you motivated, engaged, and constantly improving.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="choose-item">
+                        <img src="img/icons/chose-icon-6.png" alt="">
+                        <h5>Focus on your health</h5>
+                        <p> We are dedicated to enhancing your overall health and well-being through comprehensive fitness programs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Choseus Section End -->
+
+    <!-- Video Section Begin -->
+  <section class="video-section set-bg" data-setbg="img/video-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="video-text">
+                        <h2>Whatever it takes!</h2>
+                        <a href="https://www.youtube.com/watch?v=X_9VoqR5ojM" class="video-popup">
+                            
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Video Section End -->
+
+    <!-- Blog Section Begin -->
+    <section class="blog-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="section-title">
+                        <h2>Fuel your fitness journey!</h2>
+                        <p>Consider below reasons before joining.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row blog-gird">
+                <div class="grid-sizer"></div>
+                <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="blog-item large-item" style=" background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url('img/blog/blog-1.jpg'); background-repeat: no-repeat;">
+                        <a href="#" class="blog-text">
+                            <h5>Uncover the myriad benefits of strength training tailored specifically for women.</h5>
+                           
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="blog-item instagram-item">
+                        <a href="#" class="instagram-text">
+                           
+                            <h5>Discover how maintaining consistency can be your secret weapon in achieving your fitness goals.</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="blog-item small-item" style=" background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url('img/blog/blog-2.jpg'); background-repeat: no-repeat;">
+                        <a href="#" class="blog-text">
+                            
+                            <h5>Explore the profound impact of mindfulness and meditation on your physical fitness and mental well-being.</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="blog-item large-item xls-large" style=" background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url('img/blog/blog-3.jpg'); background-repeat: no-repeat;">
+                        <a href="#" class="blog-text">
+                           
+                            <h5>Discover effective tactics to push past fitness plateaus and achieve new levels of progress.</h5>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="blog-item large-item" style=" background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url('img/blog/blog-4.jpg'); background-repeat: no-repeat;">
+                        <a href="#" class="blog-text">
+                           
+                            <h5>Understand the critical role of rest and recovery in achieving peak fitness and preventing burnout.</h5>
+                        </a>
+                        <div class="play-btn">
+                            <a href="https://www.youtube.com/watch?v=X_9VoqR5ojM" class="video-popup">
+                               
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="blog-item small-item" style=" background-image:linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url('img/blog/blog-5.jpg'); background-repeat: no-repeat;">
+                        <a href="#" class="blog-text">
+                            
+                            <h5>Your Antibiotic One Day To 10 Day Options</h5>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+    <div th:insert="HtmlFooter"></div>
+    <!-- Cta Section Begin -->
+    
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <div th:insert="footer"></div>
+</body>
+
+</html>

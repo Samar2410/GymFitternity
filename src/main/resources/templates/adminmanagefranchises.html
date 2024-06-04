@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+    <div th:insert="header"></div>
+   
+    <script>
+        function blockfranchise(email){
+            var url="/BlockFranchise?email="+email;
+            fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml3(ans) );
+                  document.getElementById("postloader").style.display="block";
+            document.getElementById("pending").style.opacity="0.3";
+            document.getElementById("approved").style.opacity="0.3";
+            //document.getElementById("postloader").style.opacity="1";
+            
+            document.getElementById("postloader").innerHTML="<div class=\"loader\"></div>";
+        }
+        
+        function renderAsHtml3(ans){
+             document.getElementById("postloader").style.display="none";
+            document.getElementById("pending").style.opacity="1";
+            document.getElementById("approved").style.opacity="1";
+            if(ans==="success"){
+                
+              
+                Swal.fire({
+                title: "Suucess!",
+                text: "Franchise blocked!",
+                icon: "success"
+                            });
+                            
+                     fetchfranchises();
+                  
+            }
+            else Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+        }
+        function approvefranchise(email){
+           
+            var url="/ApproveFranchise?email="+email;
+            fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml2(ans) );
+                  document.getElementById("postloader").style.display="block";
+            document.getElementById("approved").style.opacity="0.3";
+            document.getElementById("pending").style.opacity="0.3";
+            //document.getElementById("postloader").style.opacity="1";
+            
+            document.getElementById("postloader").innerHTML="<div class=\"loader\"></div>";
+            
+        }
+        
+        function renderAsHtml2(ans){
+             document.getElementById("postloader").style.display="none";
+            document.getElementById("approved").style.opacity="1";
+            document.getElementById("pending").style.opacity="1";
+            if(ans==="success"){
+                
+                Swal.fire({
+                title: "Suucess!",
+                text: "Franchise approved!",
+                icon: "success"
+                            });
+                            
+                     fetchfranchises();
+                  
+            }
+            else {
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            }
+        }
+        
+    function fetchfranchises(){
+            var url="/FetchFranchises";
+            fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml(ans) );
+        }
+        
+        function renderAsHtml(ans){
+            var obj=JSON.parse(ans);
+            var arr=obj.ans;
+            var app=`<h2 style="text-align:center" class="m-3">Approved Franchises</h2>`;
+            var pen=`<h2 style="text-align:center" class="m-3">Pending Franchises</h2>`;
+            app+=`<table class="table table-hover">`;
+            app+=`<tr>`;
+            app+=`<td style="font-weight:bold">Photo</td>`;
+            app+=`<td style="font-weight:bold">Name</td>`;
+            app+=`<td style="font-weight:bold">Email</td>`;
+            app+=`<td style="font-weight:bold">Description</td>`;
+           
+            app+=`</tr>`;
+            pen+=`<table class="table table-hover">`;
+            pen+=`<tr>`;
+            pen+=`<td style="font-weight:bold">Photo</td>`;
+            pen+=`<td  style="font-weight:bold">Name</td>`;
+            pen+=`<td style="font-weight:bold">Email</td>`;
+            pen+=`<td style="font-weight:bold">Description</td>`;
+           
+            pen+=`</tr>`;
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].Status==="Pending"){
+                    pen+=`<tr>`;
+                    pen+=`<td><img style="width:150px;height:150px;" src="`+arr[i].Photo+`"></td>`;
+                    pen+=`<td>`+arr[i].Name+`</td>`;
+                    pen+=`<td>`+arr[i].Email+`</td>`;
+                     pen+=`<td>`+arr[i].Description+`</td>`;
+                      pen+=`<td><input class="btn btn-danger" type="button" value="Approve" onclick="approvefranchise('`+arr[i].Email+`')"></td>`;
+                     pen+=`</tr>`;
+                }
+                else{
+                    app+=`<tr>`;
+                    app+=`<td><img style="width:300px;height:150px;" src="`+arr[i].Photo+`"></td>`;
+                    app+=`<td>`+arr[i].Name+`</td>`;
+                    app+=`<td>`+arr[i].Email+`</td>`;
+                     app+=`<td>`+arr[i].Description+`</td>`;
+                      app+=`<td><input class="btn btn-danger" type="button" value="Block" onclick="blockfranchise('`+arr[i].Email+`')"></td>`;
+                     app+=`</tr>`;
+                }
+            }
+            
+            app+=`</table>`;
+            pen+=`</table>`;
+            
+           
+         
+            
+           
+            
+                        document.getElementById("pending").innerHTML=pen;
+                        document.getElementById("approved").innerHTML=app;
+        }
+    </script>
+    </head>
+    
+    <body onload="fetchfranchises()" style="background-color:black">
+        <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::adminnavbar"></div>
+    
+    <div class="container" id="pending" style="background-color:rgb(222, 213, 213);border:2px solid black;border-radius:20px;padding:10px;margin-top:110px;">
+        
+    </div>
+    <div class="container" id="approved" style="background-color:rgb(222, 213, 213);border:2px solid black;border-radius:20px;padding:10px;margin-top:110px;">
+        
+    </div>
+    <div style="display:none;" id="postloader">
+        
+    </div>
+    
+<!-- Cta Section End -->
+
+<!-- Footer Section Begin -->
+<div th:insert="HtmlFooter"></div>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<div th:insert="footer"></div>
+    </body>
+</html>

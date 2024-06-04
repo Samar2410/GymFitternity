@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+    <div th:insert="header"></div>
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    
+</head>
+<body style="background-color: black" onload="getpackagedata()">
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <!-- Header Section Begin -->
+
+    <div  th:replace="navbar::usernavbar"></div>
+    <div id="packageid" th:text="${packageid}" style="display:none"></div>
+   
+    <div id="price" style="display:none"></div>
+    <div id="dur" style="display:none"></div>
+    <section class="classes-section" style="margin-top:100px">
+        <div class="class-title set-bg" data-setbg="img/classes-title-bg.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 m-auto text-center">
+                        <div class="section-title pl-lg-4 pr-lg-4 pl-0 pr-0">
+                            <h2>Select date</h2>
+                            <p>Select a date to start your training.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <form action="" id="selectdate">
+            <div class="row" id="d1">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-6"> <input  style="margin:15px;width:45vw;" type="text" id="datepicker" required name="datepicker" placeholder="Select date" class="form-control" onchange="getEndDate()"></div>
+                <div class="col-lg-3"></div>
+                
+               
+                    <div  class="col-lg-6" id="start" style="color:white;text-align:right;"></div>
+                     <div class="col-lg-6" id="end" style="color:white;text-align:left"></div>
+                
+               
+                 <div class="col-lg-4"></div>
+                <div class="col-lg-4"> <input  style="margin:15px; color:white;border:2px solid white;width:25vw;;height:40px;border-radius:10px;background: linear-gradient(45deg, #e16521, #e4381C);"  type="button" onclick="buypackage()" value="Buy Package" ></div>
+                <div class="col-lg-4"></div>
+               
+            </div>
+            </form>
+        </div>
+    </section>
+   
+    <!-- Cta Section End -->
+
+    <!-- Footer Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+
+    <div th:insert="footer"></div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+ 
+        function buypackage(){
+            if(($("#selectdate").valid())){
+            var packid=document.getElementById("packageid").innerText;
+          
+            window.location.href="/PaymentOptions?packageid="+packid+"&startdate="+choosedate+"&enddate="+enddate;
+        }
+    }
+        function dateselected(){
+            var date=document.getElementById("date").innerText;
+            var days=document.getElementById("dur").innerText;
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            var s=`<h3 style="color:white">Start date: `+date+`</h3>`;
+            s+=`<h3 style="color:white">End date: `+result+`</h3>`;
+            document.getElementById("info").innerHTML=s;
+        }
+        function getpackagedata(){
+            
+            var packid=document.getElementById("packageid").innerText;
+            var url="/UserGetPackageData?packageid="+packid;
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+
+        }
+        function renderAsHtml(ans){
+            var obj=JSON.parse(ans);
+            var arr=obj.ans;
+           document.getElementById("price").innerHTML=arr[0].price;
+           document.getElementById("dur").innerHTML=arr[0].duration;
+        }
+    
+   
+  var startdate = "";var enddate=""; var choosedate;
+                                        $(function () {
+                                            $("#datepicker").datepicker({
+                                                minDate: 0
+                                            });
+                                            startdate = $("#datepicker");
+                                        });
+                                        function getEndDate()
+                                        {
+                                          
+                                            startdate=new Date(datepicker.value);
+                                           
+                                           
+                                            var diff=document.getElementById("dur").innerText;
+                                            var num=Number(diff);
+                                            
+                                            
+                                            var result=new Date(startdate);
+                                             choosedate=(result.getMonth()+1)+"/"+result.getDate()+"/"+result.getFullYear();
+                                            
+                                            result.setDate(result.getDate()+num);
+                                            
+                                             enddate=(result.getMonth()+1)+"/"+result.getDate()+"/"+result.getFullYear();
+                                          
+                                            document.getElementById("start").innerHTML="Start Date: "+choosedate;
+                                            document.getElementById("end").innerHTML="End date: "+enddate;
+                                            
+                                        }
+
+  </script>
+</body>
+</html>

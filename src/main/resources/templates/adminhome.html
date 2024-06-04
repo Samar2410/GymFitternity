@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        
+        <div th:insert="header"></div>
+    </head>
+    <body style="background-color: black">
+        <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <!-- Header Section Begin -->
+    
+    <div  th:replace="navbar::adminnavbar"></div>
+    
+        <section class="classes-section" style="margin-top:100px">
+        <div class="class-title set-bg" data-setbg="img/classes-title-bg.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 m-auto text-center">
+                        <div class="section-title pl-lg-4 pr-lg-4 pl-0 pr-0">
+                            <h2>Admin Home Page</h2>
+                            <p>Admin can manage gyms,cities,and franchise</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="classes-item set-bg" data-setbg="img/classes/class-1.jpg">
+                        <h4>Manage Cities</h4>
+                        <p>You can view all the cities and can delete them.</p>
+                        <a href="/AdminManageCities" class="primary-btn class-btn">Go</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="classes-item set-bg" data-setbg="img/classes/class-2.jpg">
+                        <h4>Manage Gyms</h4>
+                        <p>You can view relevant information regarding gyms. You can block and approve them.
+                        </p>
+                        <a href="/AdminManageGyms" class="primary-btn class-btn">Go</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="classes-item set-bg" data-setbg="img/classes/class-3.jpg">
+                        <h4>Manage franchises</h4>
+                        <p>You can view relevant information regarding franchises. You can block and approve them. </p>
+                        <a href="/AdminManageFranchises" class="primary-btn class-btn">Go</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <div th:insert="HtmlFooter"></div>
+        
+        <div th:insert="footer"></div>
+    </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+    <div th:insert="header"></div>
+   
+    <script>
+        
+                
+    function fetchbookings(){
+            var url="/OwnerFetchBookings";
+            fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml(ans) );
+        }
+        
+        function renderAsHtml(ans){
+            var obj=JSON.parse(ans);
+            var arr=obj.ans;
+             var pen=`<h2 style="text-align:center" class="m-3">Your Gyms's Memberships</h2>`;
+            
+            pen+=`<table class="table table-striped">`;
+            pen+=`<tr>`;
+            pen+=`<td style="font-weight:bold">Gym Name</td>`;
+            pen+=`<td style="font-weight:bold">User Email</td>`;
+            pen+=`<td style="font-weight:bold">Package</td>`;
+            pen+=`<td style="font-weight:bold">Price</td>`;
+            pen+=`<td style="font-weight:bold">Start date</td>`;
+            pen+=`<td style="font-weight:bold">End date</td>`;
+            
+            pen+=`</tr>`;
+            for(var i=0;i<arr.length;i++){
+                
+                    pen+=`<tr>`;
+                    
+                    pen+=`<td>`+arr[i].gymname+`</td>`;
+                    pen+=`<td>`+arr[i].user_email+`</td>`;
+                    pen+=`<td>`+arr[i].package_name+`</td>`;
+                    pen+=`<td>`+arr[i].price+`</td>`;
+                     pen+=`<td>`+arr[i].start_date+`</td>`;
+                     pen+=`<td>`+arr[i].end_date+`</td>`;
+                      
+                     pen+=`</tr>`;
+                           }
+            
+          
+            pen+=`</table>`;
+            
+           
+         
+            
+           
+            
+                        document.getElementById("bookings").innerHTML=pen;
+                       
+        }
+    </script>
+    </head>
+    
+    <body onload="fetchbookings()" style="background-color:black">
+        <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::ownernavbar"></div>
+    
+    <div class="container" id="bookings" style="background-color:rgb(222, 213, 213);border:2px solid black;border-radius:20px;padding:10px;margin-top:110px;">
+        
+    </div>
+    
+   
+<!-- Cta Section End -->
+
+<!-- Footer Section Begin -->
+<div th:insert="HtmlFooter"></div>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<div th:insert="footer"></div>
+    </body>
+</html>

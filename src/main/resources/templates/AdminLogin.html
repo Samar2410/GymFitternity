@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+
+<div th:insert="header"></div>
+<style>
+        .error{
+            color:red;
+        }
+    </style>
+
+
+</head>
+
+<body style="background-color: black;">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::adminnavbar"></div>
+
+    <!-- Header End -->
+
+   
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i> 3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Admin Login</h4>
+                      <form action="" id="login">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="email" placeholder="Email" required name="em" id="em">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="password" placeholder="Password" required name="pw" id="pw" minlength="4" maxlength="8">
+                                </div>
+                                <div class="col-lg-12">
+                                    
+                                    <input type="button" class="c-btn" value="Submit" onclick="adminlogin()">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+
+    <!-- Cta Section Begin -->
+    
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+   
+<div th:insert="footer"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  function adminlogin(){
+      if(($("#login").valid())){
+      var email=document.getElementById("em").value;
+      var password=document.getElementById("pw").value;
+      var url = "/CheckAdminLogin?email="+email+"&password="+password;
+                  
+                fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml(ans) );
+  }
+  }
+  function renderAsHtml(ans)
+            {
+                if(ans==="success"){
+                    Swal.fire({
+                title: "Success!",
+                text: "Login Successful!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      window.location.href="/AdminHome";
+                  },2000);
+                    
+                }
+                else if(ans==="fail"){
+                    Swal.fire({
+                title: "Sorry!",
+                text: "Email or password is incorrect!",
+                icon: "error"
+                            });
+                         
+                }
+                else{
+                    Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+                        
+                }
+                
+            } 
+    
+</script>
+</body>
+
+</html>

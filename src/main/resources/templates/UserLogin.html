@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+
+<div th:insert="header"></div>
+<style>
+        .error{
+            color:red;
+        }
+    </style>
+
+
+</head>
+
+<body style="background-color: black;">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::usernavbar"></div>
+
+    <!-- Header End -->
+
+   
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i>3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>User Login</h4>
+                      <form action="" id="login">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="text" placeholder="Email" required name="em" id="em">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="password" placeholder="Password" required name="pw" id="pw" minlength="4" maxlength="8">
+                                </div>
+                                <div class="col-lg-12">
+                                    
+                                    <input type="button" class="c-btn" value="Submit" onclick="userlogin()">
+                                </div>
+                                <div class="col-lg-12" style="color:white">
+                                    <div class="row">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-6" >Don't have an account? <a style="display:inline-block;text-align:center;color:white;width:100px;border-radius:10px;background: linear-gradient(45deg, #e16521, #e4381C);" href="/UserSignup">Register</a></div>
+                                    <div class="col-lg-3"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" style="color:white">
+                                    <div class="row mt-4">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-6" ><a style="display:inline-block;text-align:center;color:white;width:200px;border-radius:10px;background: linear-gradient(45deg, #e16521, #e4381C);" href="/UserForgotPassword">Forgot Password?</a></div>
+                                    <div class="col-lg-3"></div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+
+    <!-- Cta Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+
+<div th:insert="footer"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  function userlogin(){
+      if(($("#login").valid())){
+      var email=document.getElementById("em").value;
+      var password=document.getElementById("pw").value;
+     
+      var url = "/CheckUserLogin?email="+email+"&password="+password;
+                  
+                fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml(ans) );
+                  
+        }
+  }
+  function renderAsHtml(ans)
+            {
+                if(ans==="success"){
+                     Swal.fire({
+                title: "Success!",
+                text: "Login Successful!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      window.location.href="/";
+                  },2000);
+                }
+                
+                else if(ans==="fail"){
+                    Swal.fire({
+                title: "Sorry!",
+                text: "Email or password is incorrect!",
+                icon: "error"
+                            });
+                         
+                }
+                else {Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });}
+                
+            } 
+    
+</script>
+</body>
+
+</html>

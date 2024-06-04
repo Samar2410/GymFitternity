@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+    <div th:insert="header"></div>
+    <style>
+        .error{
+            color:black;
+        }
+    </style>
+    <script>
+        function deletephoto(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                   var url = "/DeletePhoto?id=" + id;
+                        fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+                }
+            });
+            
+        }
+
+        function renderAsHtml(ans) {
+
+            if (ans === "success") {
+                
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Photo deleted successfully!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                                var gymid = document.getElementById("gymid").innerText;
+                      window.location.href="/OwnerShowGymPhotos?id="+gymid;
+                  },2000);
+
+            }
+        }
+     
+    </script>
+</head>
+
+
+<body style="background-color:black">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::ownernavbar"></div>
+    <!-- Header End -->
+    <div id="gymid" style="display:none" th:text="${gymid}"></div>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg spad" data-setbg="img/about-bread.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <h2>Manage photos for gym</h2>
+                        <div class="breadcrumb-controls">
+                            <a href="#"><i class="fa fa-home"></i> Home</a>
+                            <span>Gallery</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb End -->
+
+</div>
+
+<div style="background: linear-gradient(45deg, #e16521, #e4381C);">
+    <div class="contact-form" style="padding:10px;">
+        <h4  style="text-align: center">Add Photo</h4>
+        <form action="" id="photoadd">
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <input type="file" id="f1" name="f1" class="form-control" required>
+                </div>
+                <div class="col-lg-2"></div>
+                <div class="col-lg-3"></div>
+                <div class="col-lg-6">
+
+                    <input style="color:white;border:3px solid white;" type="button" class="c-btn" value="Submit" onclick="addphoto(this.getAttribute('obj'))" th:attr="obj=${gymid}">
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--<div class="row">
+            <div class="col-sm-4" th:each="photo:${photos}">
+                <div class="gallery-item">
+                    <img  th:src="${photo.path}" alt="">
+                    <div class="gi-hover-warp">
+                        <div class="gi-hover">
+                            <a th:href="${photo.path}" class="image-popup"><i class="fa fa-search-plus"></i></a>
+                            <a href="#"><i class="fa fa-chain"></i></a>
+                            <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                        </div>
+                    </div>
+            </div>
+                </div>
+            </div>-->
+<!-- Gallery Section Begin -->
+<section class="gallery-section spad">
+    <div class="container">
+<!--        <div class="row">
+            <div class="col-lg-12">
+                <div class="gallery-controls">
+                    <ul>
+                        <li class="active" data-filter="*">All GALLERY</li>
+                        <li data-filter=".crossfit">Crossfit</li>
+                        <li data-filter=".workout">Workout</li>
+                        <li data-filter=".gym">GYM</li>
+                    </ul>
+                </div>
+            </div>
+        </div>-->
+        <div class="row gallery-filter">
+            <div  th:each="photo:${photos}" class="col-lg-4 col-sm-6 mix crossfit workout" >
+                <div class="gallery-item">
+                    <img th:src="${photo.path}" alt="">
+                    <div class="gi-hover-warp">
+                        <div class="gi-hover">
+                            <a th:href="${photo.path}" class="image-popup"><i class="fa fa-search-plus"></i></a>
+                            <a onclick="deletephoto(this.getAttribute('photoid'))" th:attr="photoid=${photo.id}"><i class="fa fa-trash"></i></a>
+                            <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="col-lg-4 col-sm-6 mix workout gym">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-2.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-2.jpg" class="image-popup"><i class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix workout">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-3.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-3.jpg" class="image-popup"><i class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix gym">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-4.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-4.jpg" class="image-popup"><i
+                                                class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix crossfit">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-5.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-5.jpg" class="image-popup"><i class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix gym crossfit">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-6.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-6.jpg" class="image-popup"><i
+                                                class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix workout">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-7.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-7.jpg" class="image-popup"><i
+                                                class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix crossfit gym">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-8.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-8.jpg" class="image-popup"><i
+                                                class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mix crossfit gym workout">
+                            <div class="gallery-item">
+                                <img src="img/gallery/gallery-9.jpg" alt="">
+                                <div class="gi-hover-warp">
+                                    <div class="gi-hover">
+                                        <a href="img/gallery/gallery-9.jpg" class="image-popup"><i
+                                                class="fa fa-search-plus"></i></a>
+                                        <a href="#"><i class="fa fa-chain"></i></a>
+                                        <h6>Time to Try a Bodyweight Workout <span>Run, Walk, Swimming</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+        </div>
+    </div>
+</section>
+<!-- Gallery Section End -->
+
+<!-- Cta Section Begin -->
+<div th:insert="HtmlFooter"></div>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<div th:insert="footer"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+         var id = 0;
+        function addphoto(obj) {
+            id = obj;
+           
+            var url = "/OwnerAddGymPhoto";
+             if(($("#photoadd").valid())){
+            var photo = document.getElementById("f1").files[0];
+            var formdata = new FormData();
+
+            formdata.append("photo", photo);
+            formdata.append("id", obj);
+
+            fetch(url, {method: "POST", body: formdata})
+                    .then(response => response.text())
+                    .then(ans => renderResponse(ans));
+        }
+        }
+        function renderResponse(ans) {
+            if (ans === "success") {
+                
+               
+                Swal.fire({
+                title: "Suucess!",
+                text: "Photo added successfully!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                                
+                      window.location.href="/OwnerShowGymPhotos?id="+id;
+                  },2000);
+                
+            } else{
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            }
+                
+        }
+    </script>
+</body>
+
+</html>

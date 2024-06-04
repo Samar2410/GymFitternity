@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+
+    <div th:insert="header"></div>
+    <style>
+        #check{
+
+            color:white;
+
+        }
+
+        .checkbox{
+            width:10%;
+        }
+        body{
+            background: #151515;
+        }
+        .error{
+            color:red;
+        }
+    </style>
+    <script>
+
+        function deletepackage(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "/DeletePackage?id=" + id;
+                    fetch(url)
+                            .then(response => response.text())
+                            .then(ans => renderAsHtml3(ans));
+                }
+            });
+
+
+        }
+
+        function renderAsHtml3(ans) {
+            if (ans === "success") {
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Package deleted successfully!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      showpackages();
+                  },2000);
+                    
+            } else{
+                Swal.fire({
+                title: "Sorry!",
+                text: "Email or password is incorrect!",
+                icon: "error"
+                            });
+            }
+                
+        }
+        
+
+        function showpackages() {
+            var gymid = document.getElementById("d1").innerText;
+            var url = "/ShowPackages?gymid=" + gymid;
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml2(ans));
+
+        }
+
+        function renderAsHtml2(ans) {
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            var s = ``;
+            for (var i = 0; i < arr.length; i++) {
+                s += `<div class="col-lg-4">
+                    <div class="single-price-plan">
+                        <h4>` + arr[i].name + `</h4>
+                        <div class="price-plan">
+                            <h2>` + arr[i].price + `<span>&#8377</span></h2>
+                            <p>` + arr[i].duration + ` days</p>
+                        </div>
+                        <p style="text-align:left; padding:20px;">` + arr[i].description + ` 
+                      
+                        </p>
+                        <a type="button" class="btn primary-btn price-btn"  onclick="deletepackage(` + arr[i].id + `)">Delete Package</a>
+                    </div>
+                </div>`;
+            }
+
+            document.getElementById("d2").innerHTML = s;
+        }
+
+
+
+    </script>
+
+</head>
+
+<body onload="showpackages()">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::ownernavbar"></div>
+    <div  id="d1" style="display:none" th:text="${gymid}"></div>
+    <!-- Header End -->
+
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i>3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Add Package</h4>
+                        <form action="" id="packadd">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Package name" name="pn"  id="pn" required>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <input type="number" placeholder="Price"  id="pc" name="pc" required>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Duration"  id="dur" name="dur" required>
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea placeholder="Description" id="des" name="des" required></textarea>
+                                </div>
+
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Submit" onclick="addpackage()">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+    <!-- Contact Section End -->
+
+    <section class="price-section spad set-bg" data-setbg="img/price-bg.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>CHOOSE Package</h2>
+                        <p>Following are this gym's packages. You can delete any as per choice.<br />
+                    </p>
+                    </div>
+
+                </div>
+            </div>
+            <div id="d2" class="row">
+
+
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Cta Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <!--    <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/masonry.pkgd.min.js"></script>
+        <script src="js/main.js"></script>-->
+    <div th:insert="footer"></div>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+        function addpackage() {
+             if($("#packadd").valid()){
+            var name = document.getElementById("pn").value;
+            var price = document.getElementById("pc").value;
+            var duration = document.getElementById("dur").value;
+            var description = document.getElementById("des").value;
+            var gymid = document.getElementById("d1").innerText;
+            var url = "/AddPackage?gymid=" + gymid + "&name=" + name + "&price=" + price + "&dur=" + duration + "&desc=" + description;
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+        }
+    }
+
+        function renderAsHtml(ans) {
+            if (ans === "success") {
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Package added successfully!",
+                icon: "success"
+                            });
+                           document.getElementById("packadd").reset();
+                      showpackages();
+                  
+            } else if (ans === "fail"){
+               
+                Swal.fire({
+                title: "Sorry!",
+                text: "Package with same name already exists!",
+                icon: "error"
+                            });
+            }
+            else
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+        }
+    </script>
+</body>
+
+</html>

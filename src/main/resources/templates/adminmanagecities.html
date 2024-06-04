@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+
+    <div th:insert="header"></div>
+
+    <style>
+        .error{
+            color:red;
+        }
+            </style>
+
+</head>
+
+<body onload="showcities()" >
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::adminnavbar"></div>
+
+    <!-- Header End -->
+
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i>3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Add City</h4>
+                        <form action="" id="addcity">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="City name"  id="ct" name="ct" required>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <textarea placeholder="Description" id="dc" name="dc" required></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file"  id="f1" class="form-control" name="f1" required >
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Submit" onclick="addcity()">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+    <div id="d1"></div>
+    <!-- Cta Section Begin -->
+
+    <!-- Cta Section End -->
+
+    <!-- Footer Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <!--    <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/masonry.pkgd.min.js"></script>
+        <script src="js/main.js"></script>-->
+    <div th:insert="footer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+                                       function removecity(city) {
+                                           Swal.fire({
+                                               title: "Are you sure?",
+                                               text: "You won't be able to revert this!",
+                                               icon: "warning",
+                                               showCancelButton: true,
+                                               confirmButtonColor: "#3085d6",
+                                               cancelButtonColor: "#d33",
+                                               confirmButtonText: "Yes, delete it!"
+                                           }).then((result) => {
+                                               if (result.isConfirmed) {
+                                                   var url = "/RemoveCity?city=" + city;
+                                                   fetch(url)
+                                                           .then(response => response.text())
+                                                           .then(ans => renderAsHtml3(ans));
+                                               }
+                                           });
+
+
+                                       }
+
+                                       function renderAsHtml3(ans) {
+                                           if (ans === "success") {
+
+                                               Swal.fire({
+                                                   title: "Success!",
+                                                   text: "City removed successfully!",
+                                                   icon: "success"
+                                               });
+                                               showcities();
+
+                                           } else if (ans === fail) {
+
+                                               Swal.fire({
+                                                   title: "Sorry!",
+                                                   text: "City does not exist!",
+                                                   icon: "error"
+                                               });
+                                           } else {
+                                               Swal.fire({
+                                                   title: "Some server error!",
+                                                   text: ans,
+                                                   icon: "error"
+                                               });
+                                           }
+                                       }
+                                       function showcities() {
+
+                                           var url = "/ShowCities";
+
+                                           fetch(url)
+                                                   .then(response => response.text())
+                                                   .then(ans => renderAsHtml2(ans));
+                                       }
+
+                                       function renderAsHtml2(ans)
+                                       {
+                                           ans = JSON.parse(ans);
+                                           var mainobj = ans;
+                                           var arr = mainobj.ans;
+                                           var s = "";
+                                           if (arr.length > 0) {
+                                               s += "<h2 style=\"text-align:center\">Added Cities</h2>";
+                                               s += "<div class=\"container\">";
+                                               s += "<div class=\"row\">";
+                                               s += "<table class=\"table table-striped\">";
+                                               s += "<tr>";
+                                               s += "<td style='font-weight:bold'>Photo</td>";
+                                               s += "<td style='font-weight:bold'>City Name</td>";
+                                               s += "<td style='font-weight:bold'>Description</td>";
+
+                                               s += "<td style='font-weight:bold'>Remove city</td>";
+                                               s += "</tr>";
+                                               for (var i = 0; i < arr.length; i++) {
+                                                   var city = arr[i];
+                                                   s += "<tr>";
+                                                   s += "<td><img style=\"width:600px;height:150px;\" src=\"" + city.photo + "\"></td>";
+                                                   s += "<td>" + city.cityname + "</td>";
+                                                   s += "<td>" + city.desc + "</td>";
+
+                                                   s += "<td><input type=\"button\" value=\"Remove\" onclick=\"removecity('" + city.cityname + "')\" class=\"btn btn-danger\" ></td>";
+                                                   s += "</tr>";
+                                               }
+                                               ans += "</table>";
+                                               ans += "</div>";
+                                               ans += "</div>";
+                                           }
+                                           document.getElementById("d1").innerHTML = s;
+
+                                       }
+
+
+                                       function addcity() {
+                                           if (($("#addcity").valid())) {
+                                               var city = document.getElementById("ct").value;
+                                               var desc = document.getElementById("dc").value;
+                                               var photo = document.getElementById("f1").files[0];
+
+                                               var url = "/AdminAddCity";
+                                               var formdata = new FormData();
+                                               formdata.append("city", city);
+                                               formdata.append("desc", desc);
+                                               formdata.append("photo", photo);
+
+                                               fetch(url, {method: "POST", body: formdata})
+                                                       .then(response => response.text())
+                                                       .then(ans => renderAsHtml(ans));
+                                           }
+                                       }
+                                       function renderAsHtml(ans)
+                                       {
+                                           if (ans === "success") {
+
+                                               Swal.fire({
+                                                   title: "Success!",
+                                                   text: "City added successfully!",
+                                                   icon: "success"
+                                               });
+                                               document.getElementById("addcity").reset();
+                                               showcities();
+
+
+                                           } else if (ans === "fail")
+                                               Swal.fire({
+                                                   title: "Sorry!",
+                                                   text: "City already exists!",
+                                                   icon: "error"
+                                               });
+
+                                           else
+                                               Swal.fire({
+                                                   title: "Some server error!",
+                                                   text: ans,
+                                                   icon: "error"
+                                               });
+                                       }
+
+    </script>
+</body>
+
+</html>

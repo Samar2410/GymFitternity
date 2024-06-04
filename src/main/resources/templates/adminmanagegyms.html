@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+    <div th:insert="header"></div>
+   
+    <script>
+        function changegymstatus(id,status){
+            
+            var url="/ChangeGymStatus?id="+id+"&status="+status;
+            fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml2(ans) );
+                  document.getElementById("postloader").style.display="block";
+            document.getElementById("pending").style.opacity="0.3";
+            document.getElementById("approved").style.opacity="0.3";
+            //document.getElementById("postloader").style.opacity="1";
+            
+            document.getElementById("postloader").innerHTML="<div class=\"loader\"></div>";
+                  
+        }
+        
+        function renderAsHtml2(ans){
+             document.getElementById("postloader").style.display="none";
+            document.getElementById("pending").style.opacity="1";
+            document.getElementById("approved").style.opacity="1";
+            if(ans==="Approved"){
+                
+                 Swal.fire({
+                title: "Success!",
+                text: "Gym approved!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      fetchgyms();
+                  },2000);
+                    
+            }
+            else if(ans==="Pending") {
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Gym blocked!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      fetchgyms();
+                  },2000);
+            }
+            else {
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            }
+        }
+                
+    function fetchgyms(){
+            var url="/FetchGyms";
+            fetch(url)
+                          .then(response => response.text())
+                          .then(ans => renderAsHtml(ans) );
+        }
+        
+        function renderAsHtml(ans){
+            var obj=JSON.parse(ans);
+            var arr=obj.ans;
+            var app=`<h2 style="text-align:center" class="m-3">Approved Gyms</h2>`;
+            var pen=`<h2 style="text-align:center" class="m-3">Pending Gyms</h2>`;
+            app+=`<table class="table table-hover">`;
+            app+=`<tr>`;
+            app+=`<td style="font-weight:bold">Photo</td>`;
+            app+=`<td style="font-weight:bold">Name</td>`;
+            app+=`<td style="font-weight:bold">City</td>`;
+            app+=`<td style="font-weight:bold">Address</td>`;
+           
+            app+=`</tr>`;
+            pen+=`<table class="table table-hover">`;
+            pen+=`<tr>`;
+            pen+=`<td style="font-weight:bold">Photo</td>`;
+            pen+=`<td style="font-weight:bold">Name</td>`;
+            pen+=`<td style="font-weight:bold">City</td>`;
+            pen+=`<td style="font-weight:bold">Address</td>`;
+           
+            pen+=`</tr>`;
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].status==="Pending"){
+                    pen+=`<tr>`;
+                    pen+=`<td><img style="width:200px;height:150px;" src="`+arr[i].photo+`"></td>`;
+                    pen+=`<td>`+arr[i].name+`</td>`;
+                    pen+=`<td>`+arr[i].city+`</td>`;
+                     pen+=`<td>`+arr[i].address+`</td>`;
+                      pen+=`<td><input class="btn btn-danger" type="button" value="Approve" onclick="changegymstatus('`+arr[i].id+`','Pending')"></td>`;
+                     pen+=`</tr>`;
+                }
+                else{
+                    app+=`<tr>`;
+                    app+=`<td><img style="width:200px;height:150px;" src="`+arr[i].photo+`"></td>`;
+                    app+=`<td>`+arr[i].name+`</td>`;
+                    app+=`<td>`+arr[i].city+`</td>`;
+                     app+=`<td>`+arr[i].address+`</td>`;
+                      app+=`<td><input class="btn btn-danger" type="button" value="Block" onclick="changegymstatus('`+arr[i].id+`','Approved')"></td>`;
+                     app+=`</tr>`;
+                }
+            }
+            
+            app+=`</table>`;
+            pen+=`</table>`;
+            
+           
+         
+            
+           
+            
+                        document.getElementById("pending").innerHTML=pen;
+                        document.getElementById("approved").innerHTML=app;
+        }
+    </script>
+    </head>
+    
+    <body onload="fetchgyms()" style="background-color:black">
+        <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::adminnavbar"></div>
+    
+    <div class="container" id="pending" style="background-color:rgb(222, 213, 213);border:2px solid black;border-radius:20px;padding:10px;margin-top:110px;">
+        
+    </div>
+    <div class="container" id="approved" style="background-color:rgb(222, 213, 213);border:2px solid black;border-radius:20px;padding:10px;margin-top:110px;">
+        
+    </div>
+    <div style="display:none;" id="postloader">
+        
+    </div>
+    
+<!-- Cta Section End -->
+
+<!-- Footer Section Begin -->
+<div th:insert="HtmlFooter"></div>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<div th:insert="footer"></div>
+    </body>
+</html>

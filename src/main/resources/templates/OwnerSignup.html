@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+
+    <div th:insert="header"></div>
+<style>
+        .error{
+            color:red;
+        }
+    </style>
+    
+
+</head>
+
+<body style="background-color: black;">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::ownernavbar"></div>
+
+    <!-- Header End -->
+
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i>3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Owner Sign up</h4>
+                        <form action="" id="signup">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Name" required name="nm" id="nm">
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="email" placeholder="Email" required name="em" id="em">
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Franchise Name" required name="fn" id="fn">
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="file" name="f1" id="f1" required class="form-control" >
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="password" placeholder="Password" required name="pw" id="pw" minlength="4" maxlength="8">
+                                </div>
+                                 <div class="col-lg-12">
+                                    <input type="password" placeholder="Confirm Password" required name="cp" id="cp" data-rule-equalto="#pw" minlength="4" maxlength="8">
+                                </div>
+                                
+                                <div class="col-lg-12">
+                                    <textarea placeholder="Description" name="dc" required id="dc"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="number" placeholder="Phone number" required  name="pn" id="pn" minlength="10" maxlength="10">
+                                </div>
+                                
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Submit" onclick="addowner()">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+    <div id="d1"></div>
+    <!-- Cta Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    
+    <div th:insert="footer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+       function addowner(){
+           if(($("#signup").valid())){
+           var name=document.getElementById("nm").value;
+           var email=document.getElementById("em").value;;
+           var franchise=document.getElementById("fn").value;;
+           var photo=document.getElementById("f1").files[0];
+           var password=document.getElementById("pw").value;
+           var desc=document.getElementById("dc").value;
+           var phone=document.getElementById("pn").value;
+           var url = "/AddOwner";
+            var formdata = new FormData();
+            formdata.append("name", name);
+            formdata.append("email", email);
+            formdata.append("franchise", franchise);
+            formdata.append("photo", photo);
+            formdata.append("password", password);
+            formdata.append("desc", desc);
+            formdata.append("phone", phone);
+
+            fetch(url, {method: "POST", body: formdata})
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+        }
+       }
+       function renderAsHtml(ans)
+        {
+                if(ans==="success"){
+                    
+                    Swal.fire({
+                title: "Success!",
+                text: "Owner added successfully!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      window.location.href="/OwnerLogin";
+                  },2000);
+                }
+                else if(ans==="fail"){
+                    
+                    Swal.fire({
+                title: "Sorry!",
+                text: "Owner already exists!",
+                icon: "warning"
+                            });
+                        
+                }
+                else {
+                    Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+                       
+                };
+        }
+
+    </script>
+</body>
+
+</html>

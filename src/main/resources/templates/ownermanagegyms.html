@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+
+    <div th:insert="header"></div>
+    <style>
+        #check{
+
+            color:white;
+
+        }
+
+        .checkbox{
+            width:10%;
+        }
+        body{
+            background: #151515;
+        }
+        .error{
+            color:red;
+        }
+    </style>
+    
+
+</head>
+
+<body onload="getcities();
+        showgyms()">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::ownernavbar"></div>
+
+    <!-- Header End -->
+
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i>3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Add Gym</h4>
+                        <form action="" id="addgym">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Gym name" name="gn"  required id="gn">
+                                </div>
+                                <div class="col-lg-12 mb-4">
+                                    <label style="color:white" for="city-names">Choose a city:</label> 
+                                    <select  class="form-control" name="city-names" id="city-names" required> 
+
+                                    </select>
+
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="number" placeholder="Phone number" name="pn"  id="pn" minlength="10" maxlength="10"  required>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Latitude"    name="la" id="la" required>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="text" placeholder="Longitude" name="lo" required id="lo">
+                                </div>
+                                <div class="col-lg-12">
+                                    <label style="color:white" for="f1">Add photo</label>
+                                    <input type="file" name="f1" required id="f1" class="form-control" >
+                                </div>
+                                <!--                                <div class="col-lg-12">
+                                                                    <input type="text" placeholder="Owner email"  id="em">
+                                                                </div>-->
+
+
+                                <div class="col-lg-12">
+                                    <textarea placeholder="Address" id="ad" name="ad" required></textarea>
+                                </div>
+                                <div class="col-lg-12 row" id="check">
+                                    <div class="col-sm-4"></div>
+                                    <div  class="col-sm-4 mb-4"><h2 style="color:white;">Amenities</h2></div>
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox1">Pool</label>
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox1" name="Pool" value="Pool"> 
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label for="checkbox2">AC</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox"  id="checkbox2" name="AC" value="AC">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox3">Changing Room</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox3" name="Changing Room" value="Changing Room">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox4">Shower</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox4" name="Shower" value="Shower">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="checkbox5">Parking Facility</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox5" name="Parking Facility" value="Parking Facility">
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="checkbox6">Water Facility</label>
+
+                                        <input style="width:10%;height:40%;" type="checkbox" id="checkbox6" name="Water Facility" value="Water Facility">
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Submit" onclick="addgym()">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+    <div id="d1"></div>
+    <!-- Cta Section Begin -->
+   
+    <!-- Cta Section End -->
+
+    <!-- Footer Section Begin -->
+   <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <!--    <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.magnific-popup.min.js"></script>
+        <script src="js/mixitup.min.js"></script>
+        <script src="js/jquery.nice-select.min.js"></script>
+        <script src="js/jquery.slicknav.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/masonry.pkgd.min.js"></script>
+        <script src="js/main.js"></script>-->
+    <div th:insert="footer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        function addpackages(id) {
+
+            var url = "/AddPackages?id=" + id;
+            window.location.href = url;
+        }
+        function addphotos(id) {
+            var url = "/OwnerShowGymPhotos?id=" + id;
+            window.location.href = url;
+
+        }
+
+
+        function deletegym(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "/DeleteGym?id=" + id;
+                    fetch(url)
+                            .then(response => response.text())
+                            .then(ans => renderAsHtml4(ans));
+                }
+            });
+
+        }
+
+        function renderAsHtml4(ans) {
+            if (ans === "success") {
+
+                Swal.fire({
+                    title: "Success!",
+                    text: "Gym deleted successfully!",
+                    icon: "success"
+                });
+                
+                    showgyms();
+                
+
+            } else {
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            }
+        }
+
+        function showgyms() {
+            var url = "/OwnerShowGyms";
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml3(ans));
+        }
+
+        function renderAsHtml3(ans) {
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            var s = `<div class="container mt-3 mb-3" contact-form>`;
+            for (var i = 0; i < arr.length; i++)
+            {
+                var obj = arr[i];
+                s = s + `<div class="row mb-2"  style="background-color:rgb(222, 213, 213);border:2px solid black;border-radius:20px;padding:10px;">
+        <div class="col-sm-5"><img style="width:400px" src="` + obj.photo + `" class="card-img" alt=""></div>
+        <div class="col-sm-5"> <h5 class="card-title">` + obj.name + `</h5>
+            <p style="color:black;font-weight:bold" class="card-text">The address of gym is ` + obj.address + `</p>
+           </div>
+        <div class="col-sm-2"><input  type="button" class="btn btn-danger mb-3" onclick="addpackages(` + obj.id + `)" value="Add Package"><br>
+            <input type="button" class="btn btn-danger mb-3" onclick="addphotos(` + obj.id + `)" value="Add Photos"><br>
+            <input type="button" class="btn btn-danger" onclick="deletegym(` + obj.id + `)" value="Delete"></div>
+    </div>`;
+            }
+            s += `</div>`;
+            document.getElementById("d1").innerHTML = s;
+        }
+
+        function addgym() {
+            if($("#addgym").valid()){
+            var url = "/OwnerAddGym";
+            var formdata = new FormData();
+
+
+            var gym = document.getElementById("gn").value;
+
+
+            var city = document.getElementById("city-names").value;
+
+            var mobile = document.getElementById("pn").value;
+            var longitude = document.getElementById("lo").value;
+            var latitude = document.getElementById("la").value;
+            var address = document.getElementById("ad").value;
+
+
+            var photo = document.getElementById("f1").files[0];
+
+            formdata.append("gym", gym);
+            formdata.append("city", city);
+            formdata.append("mobile", mobile);
+            formdata.append("longitude", longitude);
+            formdata.append("latitude", latitude);
+            formdata.append("address", address);
+            formdata.append("photo", photo);
+            if (document.getElementById("checkbox1").checked) {
+                formdata.append("pool", "true");
+            } else
+                formdata.append("pool", "false");
+            if (document.getElementById("checkbox2").checked) {
+                formdata.append("AC", "true");
+            } else
+                formdata.append("AC", "false");
+            if (document.getElementById("checkbox3").checked) {
+                formdata.append("change", "true");
+            } else
+                formdata.append("change", "false");
+            if (document.getElementById("checkbox4").checked) {
+                formdata.append("shower", "true");
+            } else
+                formdata.append("shower", "false");
+            if (document.getElementById("checkbox5").checked) {
+                formdata.append("park", "true");
+            } else
+                formdata.append("park", "false");
+            if (document.getElementById("checkbox6").checked) {
+                formdata.append("water", "true");
+            } else
+                formdata.append("water", "false");
+
+
+
+            fetch(url, {method: "POST", body: formdata})
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml2(ans));
+        }
+        }
+        function renderAsHtml2(ans) {
+            if (ans === "success") {
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Gym added successfully!",
+                icon: "success"
+                            });
+                            
+                      showgyms();
+                    document.getElementById("addgym").reset();showgyms();
+                  
+            } else if (ans === "fail"){
+                
+            Swal.fire({
+                title: "Sorry!",
+                text: "Gym with that name already exists!",
+                icon: "error"
+                            });
+                        }
+            else{
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            }
+                
+        }
+
+        function getcities() {
+
+            var url = "/GetCities";
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+
+
+        }
+
+        function renderAsHtml(ans) {
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            var s = "";
+            for (var i = 0; i < arr.length; i++) {
+                s += "<option  value=\"" + arr[i].cityname + "\">" + arr[i].cityname + "</option>";
+            }
+
+            document.getElementById("city-names").innerHTML = s;
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>

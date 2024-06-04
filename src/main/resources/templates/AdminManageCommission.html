@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+    <head>
+
+    <div th:insert="header"></div>
+    <style>
+        .error{
+            color:red;
+        }
+    </style>
+
+    <script>
+        
+    </script>
+</head>
+
+<body style="background-color: black;" onload="setamounts()">
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <div th:replace="navbar::adminnavbar"></div>
+
+    <!-- Header End -->
+
+
+
+    <!-- Contact Section Begin -->
+    <section class="contact-section spad">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="contact-info">
+                        <h4>Information</h4>
+                        <ul>
+                            <li><i class="fa fa-phone"></i>7710279071</li>
+                            <li><i class="fa fa-envelope"></i>samar@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="contact-address">
+                        <h4>Address</h4>
+                        <ul>
+                            <li><i class="fa fa-map-marker"></i> 3172,Opposite Bedi School,Putlighar,Amritsar
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8 offset-lg-1">
+                    <div class="contact-form">
+                        <h4>Add Commission</h4>
+                        <form action="" id="comm">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <select  class="form-control" name="options" id="options" required onchange="display()"> 
+                                        <option>Select Commission Type</option>
+                                        <option  value="Fixed">Fixed</option>
+                                        <option  value="Percentage">Percentage</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12 mt-3">
+                                    <input type="number" placeholder="Enter fixed amount"  name="am" id="am" style="display:none" required>
+                                </div>
+                                <div class="col-lg-12 mt-3">
+                                    <input type="number" placeholder="Enter percentage"  name="pc" id="pc" style="display:none" required>
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Update Commission" onclick="editcomm()">
+                                </div>
+
+
+                            </div>
+                        </form>
+                        <div class="contact-form mt-4">
+                            <h4>Set Commission Type</h4>
+                            <form>
+                                <div class="row">
+
+
+                                    <div class="col-lg-6 " style="text-align:right">
+                                        <label for="fixed" style="color:white">Fixed</label>
+
+                                        <input style="width:10%;height:40%" type="radio" id="fixed" name="commissiontype" value="Fixed" checked>
+                                    </div>
+                                    <div class="col-lg-6" style="text-align:left">
+                                        <label style="color:white;" for="percentage">Percentage</label>
+
+                                        <input style="width:10%;height:40%;" type="radio" id="percentage" name="commissiontype" value="Percentage">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <input type="button" class="c-btn" value="Set Commission" onclick="setcomm()">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+    </section>
+    <!-- Contact Section End -->
+
+    <!-- Cta Section Begin -->
+
+    <div th:insert="HtmlFooter"></div>
+    <!-- Footer Section End -->
+
+
+    <div th:insert="footer"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-qFOQ9YFAeGj1gDOuUD61g3D+tLDv3u1ECYWqT82WQoaWrOhAY+5mRMTTVsQdWutbA5FORCnkEPEgU0OF8IzGvA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+var selectedoption = "";
+        function display() {
+             
+            var val = document.getElementById("options").value;
+            if (val === "Fixed") {
+                document.getElementById("am").style.display = "block";
+                document.getElementById("pc").style.display = "none";
+                selectedoption = "Fixed";
+            } else if (val === "Percentage") {
+                document.getElementById("pc").style.display = "block";
+                document.getElementById("am").style.display = "none";
+                selectedoption = "Percentage";
+            }
+        
+    }
+        function setamounts() {
+            var url = "/AdminGetCommissions";
+
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+        }
+        function renderAsHtml(ans) {
+
+            var obj = JSON.parse(ans);
+            var arr = obj.ans;
+            document.getElementById("am").value = arr[0].commission;
+            document.getElementById("pc").value = arr[1].commission;
+
+        }
+
+                                        function setcomm() {
+                                            
+                                            var f = document.getElementById("fixed");
+                                            var p=document.getElementById("percentage");
+                                            if(p.checked)var url = "/SetCommissionType?type=Percentage";
+                                            else if(f.checked)var url = "/SetCommissionType?type=Fixed";
+                                            
+                                            
+                                            fetch(url)
+                                                    .then(response => response.text())
+                                                    .then(ans => renderAsHtml3(ans));
+                                        }
+                                        function renderAsHtml3(ans){
+                                            if(ans==="success"){
+                                                Swal.fire({
+                                                    title: "Success!",
+                                                    text: "Commission type updated successfully!",
+                                                    icon: "success"
+                                                });
+                                            }
+                                            
+                                            else {
+                                                Swal.fire({
+                                                    title: "Some server error!",
+                                                    text: ans,
+                                                    icon: "error"
+                                                });
+                                            }
+                                        }
+
+
+                                        function editcomm() {
+                                            var commission = "", type = ""
+                                            if (selectedoption === "Fixed") {
+                                                commission = document.getElementById("am").value;
+                                                type = "Fixed";
+
+                                            } else if (selectedoption === "Percentage") {
+                                                commission = document.getElementById("pc").value;
+                                                type = "Percentage";
+                                            }
+                                            alert(commission + type);
+                                            var url = "/UpdateCommission?commission=" + commission + "&type=" + type;
+
+                                            fetch(url)
+                                                    .then(response => response.text())
+                                                    .then(ans => renderAsHtml2(ans));
+                                        }
+
+                                        function renderAsHtml2(ans)
+                                        {
+
+                                            if (ans === "success") {
+                                                Swal.fire({
+                                                    title: "Success!",
+                                                    text: "Commission edited successfully!",
+                                                    icon: "success"
+                                                });
+
+
+                                            } else {
+                                                Swal.fire({
+                                                    title: "Some server error!",
+                                                    text: ans,
+                                                    icon: "error"
+                                                });
+
+                                            }
+
+                                        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+    <div th:insert="header"></div>
+    <script src="js/Razorpay.js" type="text/javascript"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <script>
+        var commission_type="";
+        var commission=0;
+        function getcommissiondetails(){
+            
+            var url="/GetCommissionDetails";
+            fetch(url)
+                    .then(response => response.text())
+                    .then(ans => getdetails(ans));
+        }
+        function getdetails(ans){
+            var mainobj=JSON.parse(ans);
+            var arr=mainobj.ans;
+            var price=document.getElementById("price").innerText;
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].status==="Active"){
+                    commission_type=arr[i].commission_type;
+                    if(commission_type==="Percentage"){
+                        commission=(Number(arr[i].commission)/100)*price;
+                        
+                        }
+                        else if(commission_type==="Fixed"){
+                        commission=arr[i].commission;
+                       
+                        }
+                    break;
+                }
+                
+            }
+            document.getElementById("payinfo").innerHTML="<p style='text-align:center;color:white;border-radius:10px ;background: linear-gradient(45deg, #e16521, #e4381C);' >Total amount to be paid is "+(Number(price)+Number(commission))+" including platform fee.</p>"
+            
+        }
+        function paymentlogic()
+            {
+                
+               var total=document.getElementById("price").innerText;
+               total=Number(total);
+               total+=Number(commission);
+               
+                var options = {
+                    "key": "rzp_test_96HeaVmgRvbrfT",
+                    "amount": total + "00",
+                    "name": "Project Name",
+                    "description": "",
+                    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOmghn1er2yRA0yXfMRmroSSpWEdAGNV5KHg&usqp=CAU",
+                    "handler": function (response) {
+
+                        if (response.razorpay_payment_id == "" || response.razorpay_payment_id == undefined) {
+
+                            window.location.href = "payment_action?status=failed";
+                            // paymentfail(authormobile,"Payment failed!");
+
+                            Swal.fire({
+                title: "Sorry!",
+                text: "Payment failed!",
+                icon: "error"
+                            });
+
+                        } else {
+//success
+                            online();
+                            //payment success
+                            //call your book payment function here
+                        }
+                    },
+                    "prefill": {
+                        "name": "",
+                        "email": ""
+                    },
+                    "notes": {
+                        "address": ""
+                    },
+                    "theme": {
+                        "color": "#F37254"
+                    },
+                    "modal": {
+                        "ondismiss": function () {
+                            $("#statusmodal").modal("show");
+                            document.getElementById("status").innerHTML = "Payment failed ! Try again";
+                        }
+                    }
+                };
+
+
+
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    console.log("a2");
+                    console.log(response.error.code);
+
+                    Swal.fire({
+                title: "Sorry!",
+                text: "Payment failed!",
+                icon: "error"
+                            });
+
+
+                    // paymentfail(authormobile,"Payment failed!");
+                    // rzp1.close();
+                    // alert(response.error.code);
+                    // alert(response.error.description);
+                    // alert(response.error.source);
+                    // alert(response.error.step);
+                    // alert(response.error.reason);
+                    // alert(response.error.metadata.order_id);
+                    // alert(response.error.metadata.payment_id);
+
+                });
+                rzp1.open();
+            }
+        function online(){
+            var packageid=document.getElementById("packageid").innerText;
+           var start=document.getElementById("startdate").innerText;
+           
+           var end=document.getElementById("enddate").innerText;
+           var packagename=document.getElementById("packagename").innerText;
+           var price=document.getElementById("price").innerText;
+           price=Number(price);
+           price=price+Number(commission);
+           var duration=document.getElementById("duration").innerText;
+           var gymid=document.getElementById("gymid").innerText;
+           var gymemail=document.getElementById("gymemail").innerText;
+           var address=document.getElementById("address").innerText;
+           var url="/OnlinePayment?packageid="+packageid+"&start="+start+"&end="+end+"&packagename="+packagename+"&price="+price+"&commission="+commission+"&duration="+duration+"&gymid="+gymid+"&gymemail="+gymemail+"&address="+address;
+           
+        fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml3(ans));
+            document.getElementById("postloader").style.display="block";
+            document.getElementById("pay").style.opacity="0.3";
+            //document.getElementById("postloader").style.opacity="1";
+            
+            document.getElementById("postloader").innerHTML="<div class=\"loader\"></div>";
+        }
+        function renderAsHtml3(ans){
+            document.getElementById("postloader").style.display="none";
+            document.getElementById("pay").style.opacity="1";
+            if(ans==="success"){
+                
+                Swal.fire({
+                title: "Success!",
+                text: "Payment successful,your slot has been booked!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      window.location.href="/UserBookings";
+                  },2000);
+        }
+            else {
+                Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+            };
+        }
+        function cash(){
+           var packageid=document.getElementById("packageid").innerText;
+           var start=document.getElementById("startdate").innerText;
+           
+           var end=document.getElementById("enddate").innerText;
+           var packagename=document.getElementById("packagename").innerText;
+           
+           var price=document.getElementById("price").innerText;
+           price=Number(price);
+          price+=Number(commission);
+         
+           var duration=document.getElementById("duration").innerText;
+           var gymid=document.getElementById("gymid").innerText;
+           var gymemail=document.getElementById("gymemail").innerText;
+           var address=document.getElementById("address").innerText;
+           var url="/CashPayment?packageid="+packageid+"&start="+start+"&end="+end+"&packagename="+packagename+"&price="+price+"&commission="+commission+"&duration="+duration+"&gymid="+gymid+"&gymemail="+gymemail+"&address="+address;
+           
+        fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml2(ans));
+            
+            document.getElementById("postloader").style.display="block";
+            document.getElementById("pay").style.opacity="0.3";
+            //document.getElementById("postloader").style.opacity="1";
+            
+            document.getElementById("postloader").innerHTML="<div class=\"loader\"></div>";
+        }
+        function renderAsHtml2(ans){
+            
+            document.getElementById("postloader").style.display="none";
+            document.getElementById("pay").style.opacity="1";
+            if(ans==="success"){Swal.fire({
+                title: "Success!",
+                text: "Your slot has been booked!",
+                icon: "success"
+                            });
+                            setTimeout(()=>{
+                      window.location.href="/UserBookings";
+                  },2000);}
+            else  Swal.fire({
+                title: "Some server error!",
+                text: ans,
+                icon: "error"
+                            });
+        }
+      function getpackagedata(){
+          var packid=document.getElementById("packageid").innerText;
+          var url="/UserGetGymAndPackageData?packageid="+packid;
+          fetch(url)
+                    .then(response => response.text())
+                    .then(ans => renderAsHtml(ans));
+      }
+      function renderAsHtml(ans){
+          
+         
+          var obj=JSON.parse(ans);
+          var arr=obj.ans;
+          document.getElementById("packagename").innerText=arr[0].packagename;
+           document.getElementById("price").innerText=arr[0].price;
+            document.getElementById("duration").innerText=arr[0].duration;
+             document.getElementById("gymid").innerText=arr[0].gymid;
+              document.getElementById("gymemail").innerText=arr[0].email;
+              document.getElementById("address").innerText=arr[0].address;
+              getcommissiondetails();
+
+      }
+    </script>
+   
+</head>
+<body style="background-color: black" onload="getpackagedata()">
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    <!-- Header Section Begin -->
+
+    <div  th:replace="navbar::usernavbar"></div>
+    <div id="packageid" th:text="${packageid}" style="display:none"></div>
+    <div id="startdate" th:text="${startdate}" style="display:none"></div>
+    <div id="enddate" th:text="${enddate}" style="display:none"></div>
+    <div id="packagename" style="display:none"></div>
+    <div id="price" style="display:none"></div>
+    <div id="duration" style="display:none"></div>
+    <div id="gymid" style="display:none"></div>
+    <div id="gymemail" style="display:none"></div>
+    <div id="address" style="display:none"></div>
+    <div style="margin-top:100px;"></div>
+   
+    
+    <div class="container" id="pay">
+        <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6" id="payinfo" style="color:white;font-weight:bold;"></div>
+         <div class="col-lg-3"></div>
+        </div>
+        <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8" style="color:black;">
+                    <div  class="feature-item" style="padding:10px;margin:20px;height:400px;background-image: linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)),url(myuploads/payment.jpg); background-repeat: no-repeat;background-size:cover">
+                        <h2 class="col-lg-12" style="color:white"> Choose payment option</h2>
+                        <div class="row ">
+                        <div class="col-lg-6 mt-5">
+                            <a onclick="cash()" href="#" class="primary-btn f-btn" >Cash</a>
+                        </div >
+                        <div class="col-lg-6 mt-5"> <a  href="#" onclick="paymentlogic()" class="primary-btn f-btn">Online</a></div>
+                        </div>
+                        
+                    </div>
+                </div>;
+             <div class="col-lg-2"></div>
+        </div>
+    </div>
+    <div style="display:none;" id="postloader">
+        
+    </div>
+   
+    <!-- Cta Section End -->
+    
+    <!-- Footer Section Begin -->
+    <div th:insert="HtmlFooter"></div>
+
+    <div th:insert="footer"></div>
+    
+</body>
+</html>
